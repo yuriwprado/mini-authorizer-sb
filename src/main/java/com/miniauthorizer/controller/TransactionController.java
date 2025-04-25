@@ -3,6 +3,7 @@ package com.miniauthorizer.controller;
 import com.miniauthorizer.dto.TransactionDTO;
 import com.miniauthorizer.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,8 +18,8 @@ public class TransactionController {
     private TransactionService transactionService;
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody TransactionDTO transactionDTO) {
+    public ResponseEntity<String> commit(@RequestBody TransactionDTO transactionDTO) {
         transactionService.commit(transactionDTO);
-        return ResponseEntity.ok("OK");
+        return ResponseEntity.status(HttpStatus.CREATED).body("OK");
     }
 }

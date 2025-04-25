@@ -24,9 +24,9 @@ public class TransactionService {
         this.validateTransactionParameters(transactionDTO);
         Card card = cardRepository.findByNumber(transactionDTO.getNumber());
         Double transactionValue = Double.parseDouble(transactionDTO.getValue());
+        this.validateTransaction(card, transactionDTO.getPassword(), transactionValue);
         if(transactionValue == 0d)
             return;
-        this.validateTransaction(card, transactionDTO.getPassword(), transactionValue);
         card.setBalance(card.getBalance() - transactionValue);
         cardRepository.save(card);
     }
