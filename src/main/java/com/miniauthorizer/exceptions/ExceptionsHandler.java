@@ -11,7 +11,6 @@ import org.springframework.web.context.request.WebRequest;
 @ControllerAdvice
 public class ExceptionsHandler {
 
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(DuplicateCardException.class)
     public ResponseEntity<CardBasicsDTO> handleDuplicateCardException(DuplicateCardException ex, WebRequest request) {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getCard());
@@ -22,5 +21,11 @@ public class ExceptionsHandler {
     public void handleCardNotFoundException() {
         //
     }
+
+    @ExceptionHandler(TransactionException.class)
+    public ResponseEntity<String> handleTransactionException(TransactionException ex, WebRequest request) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getReason().getDisplayMessage());
+    }
+
 
 }

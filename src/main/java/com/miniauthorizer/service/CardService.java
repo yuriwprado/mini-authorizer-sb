@@ -10,7 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
+
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @Service
 public class CardService {
@@ -28,11 +33,11 @@ public class CardService {
     }
 
     private void validateNewCard(CardBasicsDTO newCard) {
-        if( Objects.isNull(newCard) || Objects.isNull(newCard.getNumber()) || Objects.isNull(newCard.getPassword())){
+        if( isNull(newCard) || isNull(newCard.getNumber()) || isNull(newCard.getPassword())){
             throw new IllegalArgumentException();
         }
         Card card = this.cardRepository.findByNumber(newCard.getNumber());
-        if(Objects.nonNull(card)){
+        if(nonNull(card)){
             throw new DuplicateCardException(newCard);
         }
     }
@@ -45,12 +50,14 @@ public class CardService {
                 .build();
     }
 
-    public Double getBalance(String cardNumber) {
-        Card card = Objects.nonNull(cardNumber) ? cardRepository.findByNumber(cardNumber) : null;
-        if(Objects.isNull(card))
+    public String getFormattedBalance(String cardNumber) {
+        Card card = nonNull(cardNumber) ? cardRepository.findByNumber(cardNumber) : null;
+        if(isNull(card))
             throw new CardNotFoundException();
-        return card.getBalance();
+        NumberFormat formatter = DecimalFormat.getInstance(Locale.ENGLISH);
+        formatter.setMaximumFractionDigits(2);
+        formatter.setMinimumFractionDigits(2);
+        return formatter.format(card.getBalance());
     }
-
 
 }

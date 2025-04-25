@@ -20,8 +20,8 @@ public class CardController {
     }
 
     @GetMapping("/{numeroCartao}")
-    public ResponseEntity<Double> getBalance(@PathVariable(name = "numeroCartao") String cardNumber) {
-        return ResponseEntity.ok(cardService.getBalance(cardNumber));
+    public ResponseEntity<String> getBalance(@PathVariable(name = "numeroCartao") String cardNumber) {
+        return ResponseEntity.ok(cardService.getFormattedBalance(cardNumber));
     }
 
 }
