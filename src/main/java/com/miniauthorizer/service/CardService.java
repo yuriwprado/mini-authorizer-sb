@@ -1,7 +1,6 @@
 package com.miniauthorizer.service;
 
 import com.miniauthorizer.dto.CardBasicsDTO;
-import com.miniauthorizer.exceptions.CardFromDifferentUserException;
 import com.miniauthorizer.exceptions.CardNotFoundException;
 import com.miniauthorizer.exceptions.DuplicateCardException;
 import com.miniauthorizer.model.Card;
@@ -18,9 +17,6 @@ public class CardService {
 
     @Autowired
     private CardRepository cardRepository;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -45,7 +41,6 @@ public class CardService {
         return Card.builder()
                 .number(cardDTO.getNumber())
                 .password(passwordEncoder.encode(cardDTO.getPassword()))
-                .owner(userService.getCurrentUser())
                 .balance(Constants.DEFAULT_INITIAL_CARD_BALANCE)
                 .build();
     }
@@ -54,8 +49,6 @@ public class CardService {
         Card card = Objects.nonNull(cardNumber) ? cardRepository.findByNumber(cardNumber) : null;
         if(Objects.isNull(card))
             throw new CardNotFoundException();
-        if(!card.getOwner().equals(userService.getCurrentUser()))
-            throw new CardFromDifferentUserException();
         return card.getBalance();
     }
 

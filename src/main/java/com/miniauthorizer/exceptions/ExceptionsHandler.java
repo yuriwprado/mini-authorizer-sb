@@ -23,9 +23,4 @@ public class ExceptionsHandler {
         //
     }
 
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler(CardFromDifferentUserException.class)
-    public void handleCardFromDifferentUserException() {
-        //
-    }
 }
